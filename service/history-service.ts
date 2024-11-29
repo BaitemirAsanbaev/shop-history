@@ -12,4 +12,34 @@ export class HistoryService{
         }
         
     }
+    async getHistory(history:historyDTO):Promise<IHistory[]>{
+        try{
+            const newHistory = await historyRepo.getHistory(history)
+            return newHistory.rows;
+        }
+        catch(e){
+            throw e
+        }
+        
+    }
+    async getAllHistory():Promise<IHistory[]>{
+        try{
+            const newHistory = await historyRepo.getAllHistory()
+            return newHistory.rows;
+        }
+        catch(e){
+            throw e
+        }
+        
+    }
+    async deleteHistory(id:number):Promise<IHistory[]>{
+        try{
+            const newHistory = await historyRepo.deleteHistory(id)
+            return newHistory.rows[0];
+        }
+        catch(e){
+            throw e
+        }
+        
+    }
 }

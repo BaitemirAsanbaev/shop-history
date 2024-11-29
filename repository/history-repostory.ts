@@ -35,48 +35,13 @@ export const historyRepo = new (class HistoryRepo {
           (action = COALESCE($4, action)) AND
           (date >= COALESCE($5, date)) AND
           (date <= COALESCE($6, date))`,
-          [dto.item_plu, dto.shop_id, dto.amount, dto.action, dto.from, dto.to]
+          [dto.item_plu, dto.shop_id, dto.amount, dto.action, dto.from, dto.to,]
       );
     } catch (e) {
       throw e;
     }
   }
-  async getHistoryByItemPlu(history: IHistory) {
-    try {
-      return await pool.query('SELECT * FROM history WHERE "item_plu=$1"', [
-        history.item_plu,
-      ]);
-    } catch (e) {
-      throw e;
-    }
-  }
-  async getHistoryByShopId(history: IHistory) {
-    try {
-      return await pool.query('SELECT * FROM history WHERE "shop_id=$1"', [
-        history.shop_id,
-      ]);
-    } catch (e) {
-      throw e;
-    }
-  }
-  async getHistoryByAction(history: IHistory) {
-    try {
-      return await pool.query('SELECT * FROM history WHERE "action=$1"', [
-        history.action,
-      ]);
-    } catch (e) {
-      throw e;
-    }
-  }
-  async getHistoryByDate(history: IHistory) {
-    try {
-      return await pool.query('SELECT * FROM history WHERE "date=$1"', [
-        history.date,
-      ]);
-    } catch (e) {
-      throw e;
-    }
-  }
+
   async deleteHistory(id: number) {
     try {
       return await pool.query('DELETE FROM history WHERE "id=$1"', [id]);
