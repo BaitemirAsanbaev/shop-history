@@ -1,9 +1,11 @@
-import { UUIDTypes } from "uuid";
+import { UUID } from "crypto";
+import { IAction } from "./action-model";
 
-export interface history {
-  item_plu: UUIDTypes
+export interface IHistory {
+  item_plu: UUID;
   shop_id: number;
   amount: number;
-  action: string;
+  action_name: string;
+  action: IAction;
+  date: string;
 }
-
