@@ -3,6 +3,7 @@ CREATE TABLE Actions (
     "name" VARCHAR(50) UNIQUE NOT NULL
 );
 CREATE TABLE History(
+    "id" SERIAL PRIMARY KEY,
     "item_plu" UUID NOT NULL REFERENCES Item("plu"),
     "shop_id" INT NOT NULL REFERENCES Shop("id"),
     "action" VARCHAR(60) NOT NULL REFERENCES Actions("name"),
