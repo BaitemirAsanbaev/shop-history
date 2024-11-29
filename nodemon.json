@@ -1,0 +1,4 @@
+{
+    "ext": "ts",
+    "exec": "concurrently 'npx tsc --watch' 'ts-node index.ts'"
+  }
