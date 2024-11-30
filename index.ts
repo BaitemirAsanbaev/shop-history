@@ -11,11 +11,12 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 5050;
 const clientURL = process.env.CLIENT_URL || "http://localhost:5000"
+const sideServiceURL = process.env.SIDE_SERVICE_URL || "http://localhost:5050"
 const upload = multer();
 
 app.use(cors({
   credentials: true,
-  origin: [clientURL]
+  origin: [clientURL, sideServiceURL]
 }));
 
 app.use(express.json());

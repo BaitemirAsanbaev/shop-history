@@ -39,7 +39,7 @@ export const historyController = new  class HistoryController{
             return next(ApiError.BadRequest("Validation error", errors.array()));
           }
           const history:IHistory[] = await historyService.getAllHistory();
-          return res.status(200).json(history);
+          return res.status(200 ).json(history);
         } catch (e) {
           next(e);
         }

@@ -8,15 +8,18 @@ export const HistoryRouter = express.Router();
 const validateCreateHistory = [
     body("inventory_id")
     .notEmpty()
-    .withMessage("Name is required"),
+    .withMessage("inventory_id is required"),
     body("amount")
     .notEmpty()
-    .withMessage("Name is required"),
+    .withMessage("amount is required"),
     body("action")
     .notEmpty()
-    .withMessage("Name is required"),
+    .withMessage("action is required"),
     
 ]
 
 HistoryRouter.post("/create", validate(validateCreateHistory), historyController.createHistory as any);
+HistoryRouter.get("/", historyController.getHistory as any);
+HistoryRouter.get("/all", historyController.getAllHistory as any);
+HistoryRouter.delete("/delete", historyController.deleteHistory as any);
 
