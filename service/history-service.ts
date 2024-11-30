@@ -7,6 +7,7 @@ export const historyService = new class HistoryService {
   async createHistory(history: historyDTO) {
     try {
       logger.info(`Creating history entry for inventory_id: ${history.inventory_id} with action: ${history.action}`);
+
       const newHistory = await historyRepo.createHistory(history);
       logger.info(`History entry created successfully: ${JSON.stringify(newHistory.rows[0])}`);
       return newHistory.rows[0];
@@ -19,9 +20,13 @@ export const historyService = new class HistoryService {
   async getHistory(history: historyDTO): Promise<IHistory[]> {
     try {
       logger.info(`Fetching history with filters: ${JSON.stringify(history)}`);
+
+      if(history.item_plu || history.shop_id){
+        
+      }
       const historyEntries = await historyRepo.getHistory(history);
-      logger.info(`Fetched ${historyEntries.rows.length} history entries`);
-      return historyEntries.rows;
+      logger.info(`Fetched ${historyEntries.length} history entries`);
+      return historyEntries;
     } catch (e) {
       logger.error(`Error fetching history: ${e}`);
       throw e;

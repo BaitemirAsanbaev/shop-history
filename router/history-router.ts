@@ -10,7 +10,7 @@ export const HistoryRouter = express.Router();
  * /history/create:
  *   post:
  *     summary: Create a new history entry
- *     description: Create a new entry in the history table with inventory_id, amount, and action.
+ *     description: Create a new entry in the history table with item_plu, shop_id, amount, and action.
  *     tags:
  *       - History
  *     requestBody:
@@ -20,26 +20,40 @@ export const HistoryRouter = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - inventory_id
+ *               - item_plu
+ *               - shop_id
  *               - amount
  *               - action
  *             properties:
- *               inventory_id:
+ *               item_plu:
  *                 type: string
+ *                 example: "e4d909c290d0fb1ca068ffaddf22cbd0"
+ *                 description: The unique identifier for the item (UUID format)
+ *               shop_id:
+ *                 type: integer
+ *                 description: The unique identifier for the shop
  *               amount:
  *                 type: integer
+ *                 description: The amount associated with the history entry
  *               action:
  *                 type: string
+ *                 description: The action being recorded in the history entry
  *     responses:
  *       201:
  *         description: History entry created successfully
  *       400:
  *         description: Validation error
  */
+
 const validateCreateHistory = [
-  body("inventory_id")
+  body("item_plu")
     .notEmpty()
-    .withMessage("inventory_id is required"),
+    .withMessage("Item  PLU is required")
+    .isUUID()
+    .withMessage("Item  PLU must be valid UUID"),
+    body("shop_id")
+    .notEmpty()
+    .withMessage("Shop is required"),
   body("amount")
     .notEmpty()
     .withMessage("amount is required"),

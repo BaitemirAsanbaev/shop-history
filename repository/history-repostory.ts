@@ -1,5 +1,7 @@
+import { UUID } from "crypto";
 import { pool } from "../db/db";
-import { historyDTO } from "../model/history-model";
+import { historyDTO, IHistory } from "../model/history-model";
+import { logger } from "../utils/logger";
 
 export const historyRepo = new class HistoryRepo {
   async createHistory(history: historyDTO) {
@@ -19,21 +21,69 @@ export const historyRepo = new class HistoryRepo {
       throw e;
     }
   }
-  async getHistory(dto: historyDTO) {
+  async getHistory(dto: historyDTO): Promise<IHistory[]> {
     try {
-      return await pool.query(
-        `SELECT * FROM history WHERE
-          (inventory_id = COALESCE($1, inventory_id)) AND
-          (amount = COALESCE($2, amount)) AND
-          (action = COALESCE($3, action)) AND
-          (date >= COALESCE($4, date)) AND
-          (date <= COALESCE($5, date))`,
-        [dto.inventory_id, dto.amount, dto.action, dto.from, dto.to]
-      );
-    } catch (e) { 
+      const { item_plu, shop_id, inventory_id, amount, action, from, to } = dto;
+      let inventoryIds: number[] = [];
+  
+      // Step 1: Fetch inventories based on item_plu or shop_id
+      if (item_plu || shop_id) {
+        let inventoryQuery = `SELECT id FROM inventory WHERE 1=1`; // Base query
+        const inventoryParams: any[] = [];
+        let paramIndex = 1;
+  
+        if (item_plu) {
+          inventoryQuery += ` AND item_plu = $${paramIndex++}`;
+          inventoryParams.push(item_plu);
+        }
+        if (shop_id) {
+          inventoryQuery += ` AND shop_id = $${paramIndex++}`;
+          inventoryParams.push(shop_id);
+        }
+  
+        const inventoriesResult = await pool.query(inventoryQuery, inventoryParams);
+        inventoryIds = inventoriesResult.rows.map((row: { id: number }) => row.id);
+      }
+  
+      // If inventory_id is provided, directly use it (overrides item_plu/shop_id logic)
+      if (inventory_id) {
+        inventoryIds = [inventory_id];
+      }
+  
+      // Step 2: Fetch histories for the inventory IDs
+      let historyQuery = `SELECT * FROM history WHERE 1=1`; // Base query for histories
+      const historyParams: any[] = [];
+      let historyParamIndex = 1;
+  
+      if (inventoryIds.length > 0) {
+        historyQuery += ` AND inventory_id = ANY($${historyParamIndex++})`;
+        historyParams.push(inventoryIds);
+      }
+      if (amount !== undefined) {
+        historyQuery += ` AND amount = $${historyParamIndex++}`;
+        historyParams.push(amount);
+      }
+      if (action !== undefined) {
+        historyQuery += ` AND action = $${historyParamIndex++}`;
+        historyParams.push(action);
+      }
+      if (from !== undefined) {
+        historyQuery += ` AND date >= $${historyParamIndex++}`;
+        historyParams.push(from);
+      }
+      if (to !== undefined) {
+        historyQuery += ` AND date <= $${historyParamIndex++}`;
+        historyParams.push(to);
+      }
+  
+      const historyResult = await pool.query(historyQuery, historyParams);
+      return historyResult.rows;
+    } catch (e) {
+      logger.error(`Error fetching history: ${e}`);
       throw e;
     }
   }
+  
 
   async deleteHistory(id: number) {
     try {
