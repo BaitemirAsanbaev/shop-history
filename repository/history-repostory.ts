@@ -1,18 +1,12 @@
 import { pool } from "../db/db";
 import { historyDTO, IHistory } from "../model/history-model";
 
-export const historyRepo = new (class HistoryRepo {
+export const historyRepo = new class HistoryRepo {
   async createHistory(history: historyDTO) {
     try {
       return await pool.query(
-        "INSERT INTO history (item_plu, shop_id, amount, action, data) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [
-          history.item_plu,
-          history.shop_id,
-          history.amount,
-          history.action,
-          history.date,
-        ]
+        "INSERT INTO history (inventory_id, amount, action, data) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [history.inventory_id, history.amount, history.action, history.date]
       );
     } catch (e) {
       throw e;
@@ -25,17 +19,16 @@ export const historyRepo = new (class HistoryRepo {
       throw e;
     }
   }
-  async getHistory(dto:historyDTO) {
+  async getHistory(dto: historyDTO) {
     try {
       return await pool.query(
         `SELECT * FROM history WHERE
-          (item_plu = COALESCE($1, item_plu)) AND
-          (shop_id = COALESCE($2, shop_id)) AND
-          (amount = COALESCE($3, amount)) AND
-          (action = COALESCE($4, action)) AND
-          (date >= COALESCE($5, date)) AND
-          (date <= COALESCE($6, date))`,
-          [dto.item_plu, dto.shop_id, dto.amount, dto.action, dto.from, dto.to,]
+          (inventory_id = COALESCE($1, item_plu)) AND
+          (amount = COALESCE($2, amount)) AND
+          (action = COALESCE($3, action)) AND
+          (date >= COALESCE($4, date)) AND
+          (date <= COALESCE($5, date))`,
+        [dto.inventory_id, dto.amount, dto.action, dto.from, dto.to]
       );
     } catch (e) {
       throw e;
@@ -44,9 +37,9 @@ export const historyRepo = new (class HistoryRepo {
 
   async deleteHistory(id: number) {
     try {
-      return await pool.query('DELETE FROM history WHERE "id=$1"', [id]);
+      return await pool.query('DELETE FROM history WHERE "id"=$1', [id]);
     } catch (e) {
       throw e;
     }
   }
-})();
+};

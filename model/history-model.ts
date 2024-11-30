@@ -3,8 +3,7 @@ import { IAction } from "./action-model";
 
 export interface IHistory {
   id:number
-  item_plu: UUID;
-  shop_id: number;
+  inventory_id:number
   amount: number;
   action: string;
   date: string;
