@@ -1,5 +1,5 @@
 import { pool } from "../db/db";
-import { historyDTO, IHistory } from "../model/history-model";
+import { historyDTO } from "../model/history-model";
 
 export const historyRepo = new class HistoryRepo {
   async createHistory(history: historyDTO) {

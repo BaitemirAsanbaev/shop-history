@@ -5,6 +5,7 @@ import multer from "multer"
 import errorHandler from "./utils/error-handler";
 import { historyController } from "./controller/history-controller";
 import { HistoryRouter } from "./router/history-router";
+import { ActionsRouter } from "./router/actions-router";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(upload.none());
 
 app.use("/api/v1/history", HistoryRouter)
+app.use("/api/v1/actions", ActionsRouter)
 
 
 app.use(errorHandler as any);

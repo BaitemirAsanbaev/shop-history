@@ -1,5 +1,4 @@
-import { UUID } from "crypto";
-import { IAction } from "./action-model";
+import { IAction } from "./actions-model";
 
 export interface IHistory {
   id:number

@@ -21,5 +21,5 @@ const validateCreateHistory = [
 HistoryRouter.post("/create", validate(validateCreateHistory), historyController.createHistory as any);
 HistoryRouter.get("/", historyController.getHistory as any);
 HistoryRouter.get("/all", historyController.getAllHistory as any);
-HistoryRouter.delete("/delete", historyController.deleteHistory as any);
+HistoryRouter.delete("/delete/:id", historyController.deleteHistory as any);
 
