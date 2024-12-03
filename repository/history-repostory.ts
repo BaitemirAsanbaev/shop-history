@@ -23,9 +23,9 @@ export const historyRepo = new class HistoryRepo {
   }
   async getHistory(dto: historyDTO): Promise<IHistory[]> {
     try {
-      const { item_plu, shop_id, inventory_id, amount, action, from, to } = dto;
+      const { item_plu, shop_id, amount, action, from, to } = dto;
       let inventoryIds: number[] = [];
-  
+      logger.info(`DATA ${item_plu} - ${shop_id}`)
       // Step 1: Fetch inventories based on item_plu or shop_id
       if (item_plu || shop_id) {
         let inventoryQuery = `SELECT id FROM inventory WHERE 1=1`; // Base query
@@ -44,11 +44,7 @@ export const historyRepo = new class HistoryRepo {
         const inventoriesResult = await pool.query(inventoryQuery, inventoryParams);
         inventoryIds = inventoriesResult.rows.map((row: { id: number }) => row.id);
       }
-  
-      // If inventory_id is provided, directly use it (overrides item_plu/shop_id logic)
-      if (inventory_id) {
-        inventoryIds = [inventory_id];
-      }
+
   
       // Step 2: Fetch histories for the inventory IDs
       let historyQuery = `SELECT * FROM history WHERE 1=1`; // Base query for histories

@@ -6,13 +6,13 @@ export const historyService = new class HistoryService {
     
   async createHistory(history: historyDTO) {
     try {
-      logger.info(`Creating history entry for inventory_id: ${history.inventory_id} with action: ${history.action}`);
+      logger.info(`Creating history entry with action: ${history.action}`);
 
       const newHistory = await historyRepo.createHistory(history);
       logger.info(`History entry created successfully: ${JSON.stringify(newHistory.rows[0])}`);
       return newHistory.rows[0];
     } catch (e) {
-      logger.error(`Error creating history for inventory_id: ${history.inventory_id} - ${e}`);
+      logger.error(`Error creating history - ${e}`);
       throw e;
     }
   }

@@ -46,14 +46,11 @@ export const HistoryRouter = express.Router();
  */
 
 const validateCreateHistory = [
-  body("item_plu")
+  body("inventory_id")
     .notEmpty()
     .withMessage("Item  PLU is required")
     .isUUID()
     .withMessage("Item  PLU must be valid UUID"),
-    body("shop_id")
-    .notEmpty()
-    .withMessage("Shop is required"),
   body("amount")
     .notEmpty()
     .withMessage("amount is required"),
