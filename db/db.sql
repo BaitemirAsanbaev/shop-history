@@ -7,5 +7,5 @@ CREATE TABLE History(
     "inventory_id" UUID NOT NULL REFERENCES Inventory("id"),
     "amount" INT NOT NULL, 
     "action" VARCHAR(60) NOT NULL REFERENCES Actions("name"),
-    "date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
 );
