@@ -29,9 +29,9 @@ npm install
 ```
 
 ### 3. Создание базы данных
-Создайте базу данных в PostgreSQL:
+shop-inventory и shop-history имеют общую базу данных, если она ещё не создана то создайте её:
 ```sql
-CREATE DATABASE history;
+CREATE DATABASE inventory;
 ```
 
 ### 4. Создание таблиц
